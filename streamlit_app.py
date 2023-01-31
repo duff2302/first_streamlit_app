@@ -7,8 +7,8 @@ from urllib.error import URLError
 ## create a function to get fruit info from fruityvice api
 def get_fruityvice_data(this_fruit_choice):
 	fruityvice_response = requests.get("https://fruityvice.com/api/fruit/" + fruit_choice)
-    	## normalize json response
-    	fruityvice_normalized = pd.json_normalize(fruityvice_response.json())
+    ## normalize json response
+    fruityvice_normalized = pd.json_normalize(fruityvice_response.json())
 	return fruityvice_normalized
 
 
