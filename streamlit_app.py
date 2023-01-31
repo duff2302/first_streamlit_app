@@ -11,6 +11,12 @@ def get_fruityvice_data(this_fruit_choice):
 	fruityvice_normalized = pd.json_normalize(fruityvice_response.json())
 	return fruityvice_normalized
 
+## get fruit load list function
+def get_fruit_load_list():
+	### Get data from SnowFlake
+	with my_cnx.cursor() as my_cur:
+		my_cur.execute("SELECT * FROM pc_rivery_db.public.fruit_load_list")
+		return my_cur.fetchall()	
 
 ## fuit list
 my_fruit_list = pd.read_csv("https://uni-lab-files.s3.us-west-2.amazonaws.com/dabw/fruit_macros.txt")
@@ -47,13 +53,13 @@ except URLError as e:
 	streamlit.error()
 streamlit.stop()
 
-### Get data from SnowFlake
-my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
-my_cur = my_cnx.cursor()
-my_cur.execute("SELECT * FROM pc_rivery_db.public.fruit_load_list")
-my_data_rows = my_cur.fetchall()
+
 streamlit.header("The fruit load list contains : ")
-streamlit.dataframe(my_data_rows)
+## Button to load fruit load list
+if streamlit.button("Get Fruit Load List'):
+	my_cnx = snowflake.connector.connect(**streamlit.secrets["snowflake"])
+	fruit_load_list_data = get_fruit_load_list()
+	streamlit.dataframe(fruit_load_list_data)
 
 # ask what fruit to add to list
 add_my_fruit = streamlit.text_input("What fruit would you like to add?","kiwi")
